@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accel World Timer - Почувствуй силу ускорения!</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#00ffff">
+
+    <!-- iOS support -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Accel Timer">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0a0e1a 0%, #1a1a2e 50%, #16213e 100%);
+            color: #00ffff;
+            font-family: 'Orbitron', monospace;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            padding: 20px;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at center, rgba(0, 255, 255, 0.1) 0%, transparent 70%);
+            animation: pulse 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.3; transform: scale(1); }
+            100% { opacity: 0.7; transform: scale(1.1); }
+        }
+        
+        .logo {
+            font-size: 4em;
+            font-weight: 900;
+            text-shadow: 0 0 30px #00ffff, 0 0 60px #00ffff;
+            margin-bottom: 20px;
+            animation: glow 2s ease-in-out infinite alternate;
+            background: linear-gradient(45deg, #00ffff, #ff0080, #ffcc00, #00ffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        @keyframes glow {
+            from { text-shadow: 0 0 20px #00ffff, 0 0 30px #00ffff; }
+            to { text-shadow: 0 0 40px #00ffff, 0 0 60px #00ffff, 0 0 80px #00ffff; }
+        }
+        
+        .tagline {
+            font-size: 1.5em;
+            color: #66d9ff;
+            margin-bottom: 10px;
+            animation: slideIn 1s ease-out 0.5s both;
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            color: #ffcc00;
+            margin-bottom: 40px;
+            animation: slideIn 1s ease-out 1s both;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .cta-button {
+            background: linear-gradient(45deg, #00ffff, #ff0080);
+            border: none;
+            padding: 20px 40px;
+            font-size: 1.3em;
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            color: white;
+            border-radius: 15px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 255, 255, 0.3);
+            animation: slideIn 1s ease-out 1.5s both;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .cta-button:hover::before {
+            left: 100%;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(0, 255, 255, 0.5);
+        }
+        
+        .features {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .feature-card {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            backdrop-filter: blur(15px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+        
+        .feature-card:hover::before {
+            left: 100%;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(0, 255, 255, 0.6);
+            box-shadow: 0 20px 40px rgba(0, 255, 255, 0.2);
+        }
+        
+        .feature-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .feature-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #00ffff;
+            margin-bottom: 15px;
+        }
+        
+        .feature-desc {
+            color: #66d9ff;
+            line-height: 1.6;
+        }
+        
+        .demo-section {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 80px 20px;
+            text-align: center;
+        }
+        
+        .demo-title {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: #00ffff;
+            margin-bottom: 30px;
+        }
+        
+        .demo-example {
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px auto;
+            max-width: 600px;
+            font-size: 1.2em;
+        }
+        
+        .conversion-arrow {
+            color: #ff0080;
+            font-size: 2em;
+            margin: 20px 0;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        
+        .final-cta {
+            padding: 80px 20px;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(255, 0, 128, 0.1));
+        }
+        
+        .final-title {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: #00ffff;
+            margin-bottom: 20px;
+        }
+        
+        .final-text {
+            font-size: 1.2em;
+            color: #66d9ff;
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .particle {
+            position: absolute;
+            background: #00ffff;
+            width: 2px;
+            height: 2px;
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) translateX(0px);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-10vh) translateX(50px);
+                opacity: 0;
+            }
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: 700;
+            color: #ffcc00;
+        }
+        
+        .stat-label {
+            color: #66d9ff;
+            font-size: 0.9em;
+        }
+        
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 3em;
+            }
+            
+            .tagline {
+                font-size: 1.2em;
+            }
+            
+            .subtitle {
+                font-size: 1em;
+            }
+            
+            .cta-button {
+                padding: 15px 30px;
+                font-size: 1.1em;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats {
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1 class="logo">ACCEL WORLD</h1>
+        <p class="tagline">Time Converter</p>
+        <p class="subtitle">Почувствуй силу ускоренного времени!</p>
+        <a href="https://emptytalonxd.github.io/accel-world-app/" class="cta-button" target="_blank">
+            🚀 ЗАПУСТИТЬ ПРИЛОЖЕНИЕ
+        </a>
+        
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-number">1000x</div>
+                <div class="stat-label">Ускорение</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">1.8</div>
+                <div class="stat-label">Секунды</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">30</div>
+                <div class="stat-label">Минут</div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Features Section -->
+    <section class="features">
+        <h2 class="demo-title">Возможности приложения</h2>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <span class="feature-icon">⚡</span>
+                <h3 class="feature-title">Мгновенная конвертация</h3>
+                <p class="feature-desc">Конвертируй время между реальным и ускоренным миром Accel World за долю секунды. Точные расчеты с коэффициентом 1000x!</p>
+            </div>
+            
+            <div class="feature-card">
+                <span class="feature-icon">💬</span>
+                <h3 class="feature-title">Умный чат-ввод</h3>
+                <p class="feature-desc">Вводи время естественным образом: "3 года 5 месяцев", "1.8 сек", "30 мин" - приложение поймет любой формат!</p>
+            </div>
+            
+            <div class="feature-card">
+                <span class="feature-icon">🎨</span>
+                <h3 class="feature-title">Киберпанк дизайн</h3>
+                <p class="feature-desc">Погружайся в атмосферу Accel World с неоновыми эффектами, анимациями и футуристичным интерфейсом!</p>
+            </div>
+            
+            <div class="feature-card">
+                <span class="feature-icon">📱</span>
+                <h3 class="feature-title">Любые устройства</h3>
+                <p class="feature-desc">Работает на PC, Mac, iPhone, Android. Добавь на главный экран и используй как native приложение!</p>
+            </div>
+            
+            <div class="feature-card">
+                <span class="feature-icon">🧹</span>
+                <h3 class="feature-title">Удобство использования</h3>
+                <p class="feature-desc">Быстрая очистка полей, двусторонняя конвертация, красивые анимации и эффекты на каждое действие!</p>
+            </div>
+            
+            <div class="feature-card">
+                <span class="feature-icon">🌐</span>
+                <h3 class="feature-title">PWA технологии</h3>
+                <p class="feature-desc">Современное веб-приложение с поддержкой офлайн режима и установки на устройство!</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Demo Section -->
+    <section class="demo-section">
+        <h2 class="demo-title">Как это работает?</h2>
+        
+        <div class="demo-example">
+            <div style="color: #00ffff;">🌍 Реальное время</div>
+            <div style="font-size: 1.5em; color: #ffcc00; margin: 10px 0;">1.8 секунды</div>
+        </div>
+        
+        <div class="conversion-arrow">⬇️</div>
+        
+        <div class="demo-example">
+            <div style="color: #ff0080;">⚡ Ускоренное время</div>
+            <div style="font-size: 1.5em; color: #ffcc00; margin: 10px 0;">30 минут</div>
+        </div>
+        
+        <p style="color: #66d9ff; margin-top: 30px; font-size: 1.1em;">
+            За 1.8 секунды в реальном мире в Accel World проходит целых 30 минут!<br>
+            Представь, сколько времени у тебя есть для размышлений! 🤯
+        </p>
+    </section>
+    
+    <!-- Final CTA -->
+    <section class="final-cta">
+        <h2 class="final-title">Готов ускориться?</h2>
+        <p class="final-text">
+            Присоединяйся к миру Accel World и почувствуй, что значит иметь все время мира для принятия решений. 
+            Это не просто калькулятор - это портал в ускоренную реальность!
+        </p>
+        <a href="https://emptytalonxd.github.io/accel-world-app/" class="cta-button" target="_blank">
+            ⚡ ВОЙТИ В УСКОРЕННЫЙ МИР
+        </a>
+        
+        <div style="margin-top: 40px; color: #66d9ff; font-size: 0.9em;">
+            🆓 Совершенно бесплатно • 📱 Работает везде • ⚡ Мгновенно
+        </div>
+    </section>
+
+    <script>
+        // Создание частиц
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (Math.random() * 5 + 10) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        // Анимация появления элементов при скролле
+        function animateOnScroll() {
+            const cards = document.querySelectorAll('.feature-card');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animation = 'slideIn 0.8s ease-out forwards';
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            cards.forEach(card => observer.observe(card));
+        }
+        
+        // Эффект мерцания для статистики
+        function animateStats() {
+            const statNumbers = document.querySelectorAll('.stat-number');
+            
+            statNumbers.forEach(stat => {
+                setInterval(() => {
+                    stat.style.textShadow = '0 0 20px #ffcc00';
+                    setTimeout(() => {
+                        stat.style.textShadow = 'none';
+                    }, 200);
+                }, Math.random() * 3000 + 2000);
+            });
+        }
+        
+        // Инициализация
+        createParticles();
+        animateOnScroll();
+        animateStats();
+        
+        // Дополнительные эффекты при клике на CTA
+        document.querySelectorAll('.cta-button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                // Создаем взрыв частиц
+                for (let i = 0; i < 10; i++) {
+                    const spark = document.createElement('div');
+                    spark.style.position = 'fixed';
+                    spark.style.width = '4px';
+                    spark.style.height = '4px';
+                    spark.style.background = '#00ffff';
+                    spark.style.borderRadius = '50%';
+                    spark.style.left = e.clientX + 'px';
+                    spark.style.top = e.clientY + 'px';
+                    spark.style.pointerEvents = 'none';
+                    spark.style.zIndex = '9999';
+                    
+                    document.body.appendChild(spark);
+                    
+                    const angle = (Math.PI * 2 * i) / 10;
+                    const velocity = 100;
+                    
+                    spark.animate([
+                        { transform: 'translate(0, 0)', opacity: 1 },
+                        { 
+                            transform: `translate(${Math.cos(angle) * velocity}px, ${Math.sin(angle) * velocity}px)`, 
+                            opacity: 0 
+                        }
+                    ], {
+                        duration: 1000,
+                        easing: 'ease-out'
+                    }).onfinish = () => spark.remove();
+                }
+            });
+        });
+    </script>
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("sw.js")
+    .then(() => console.log("SW registered"))
+    .catch(err => console.error("SW failed", err));
+}
+</script>
+</body>
+</html>
