@@ -1,8 +1,8 @@
 {
   "name": "Accel World Timer",
   "short_name": "Accel Timer",
-  "start_url": "/index.html",
-  "scope": "/",
+  "start_url": "/accel-world-projects/index.html",
+  "scope": "/accel-world-projects/",
   "display": "standalone",
   "background_color": "#0a0e1a",
   "theme_color": "#00ffff",
